@@ -10,6 +10,8 @@ var logger = require('morgan');
 
 //require routes
 var search = require('./routes/search.js');
+var auth = require('./routes/auth.js');
+var signup = require('./routes/signup.js');
 
 //fire up the app
 var app = express();
@@ -27,7 +29,8 @@ app.use(cors());
 
 //middleware routes
 app.use('/search', search);
-// app.use('/auth', auth); //no access if no token
+app.use('/signup', signup);
+app.use('/auth', auth); //no access if no token
 // app.use(expressJwt({secret: process.env.SECRET}));
 // app.use('/users', users); //, expressJwt({secret: 'INTERCAMBIOSECRETKEY'})
 
