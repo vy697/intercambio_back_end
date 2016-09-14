@@ -4,7 +4,7 @@ var express = require('express'),
     router = express.Router(),
     knex = require('../db/knex.js');
 
-function getExchanges() {
+function getAllExchanges() {
   return knex('user_speaks_language')
     .join('languages', 'languages.id', 'user_speaks_language.language_id')
     .join('users', 'users.id', 'user_speaks_language.user_id')
@@ -15,7 +15,7 @@ function getExchanges() {
 }
 
 router.get('/', function(req, res) {
-  getExchanges()
+  getAllExchanges()
   .then(function(data) {
     console.log(data);
     res.json(data);

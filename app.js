@@ -1,12 +1,13 @@
 'use strict';
 
 //require dependencies
-require('dotenv');
+require('dotenv').config();
 var express = require('express');
 var bodyparser = require('body-parser');
 var cors = require('cors');
 var expressJwt = require('express-jwt');
 var logger = require('morgan');
+
 
 //require routes
 var search = require('./routes/search.js');
@@ -31,7 +32,7 @@ app.use(cors());
 app.use('/search', search);
 app.use('/signup', signup);
 app.use('/auth', auth); //no access if no token
-// app.use(expressJwt({secret: process.env.SECRET}));
+app.use(expressJwt({ secret: process.env.SECRET})); //all routes from here on are restricted to users with tokens
 // app.use('/users', users); //, expressJwt({secret: 'INTERCAMBIOSECRETKEY'})
 
 
