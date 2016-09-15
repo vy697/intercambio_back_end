@@ -11,7 +11,6 @@ function userExists(req) {
     });
   }
 
-//working
 router.post('/', function(req, res) {
   var post = req.body;
 
@@ -23,7 +22,7 @@ router.post('/', function(req, res) {
     } else {
       bcrypt.genSalt(10, function(err, salt) {
         bcrypt.hash(post.pw, salt, function(err, hash) {
-           knex('users').insert({
+           return knex('users').insert({
             name: post.name,
             email: post.email,
             pw: hash,
@@ -36,24 +35,31 @@ router.post('/', function(req, res) {
             online: post.online,
             lang_preference: post.lang_preference
           })
-          
-          // TODO: insert into user speaks & user learns
-          // .returning('id')
-          //
-          // .then(function(id) {
-          //   knex('user_speaks_language').insert({
-          //     user_id: id,
-          //     // TODO: is this right??
-          //     language_id: post.language_id
-          //   });
-          // })
-
-          .then(function() {
-            res.send('Sign up successful!');
-          })
-          .catch(function(err) {
-            console.log('Uh oh. Not able to sign up', err);
-            res.sendStatus(500);
+          .returning('id')
+          .then(function(id) {
+            console.log(id);
+            return knex('user_speaks_language').insert({
+              user_id: Number(id),
+              //form's language & level id numbers
+              language_id: post.user_speaks.language_id,
+              level_id: post.user_speaks.level_id
+            })
+            .returning('user_id')
+            .then(function(user_id) {
+              return knex('user_learns_language').insert({
+                user_id: Number(user_id),
+                language_id: post.user_learns.language_id,
+                //form's language & level id numbers
+                level_id: post.user_learns.level_id
+              })
+              .then(function() {
+                res.json({message: 'Sign up successful!'});
+              });
+            })
+            .catch(function(err) {
+              console.log('Uh oh. Not able to sign up', err);
+              res.sendStatus(500);
+           });
           });
          });
        });

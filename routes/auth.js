@@ -15,8 +15,7 @@ function userExists(req) {
 router.post('/', function(req, res) {
 
   var user = {
-    email: req.body.email,
-    pw: req.body.pw
+    email: req.body.email
   };
 
   userExists(req)
@@ -24,7 +23,7 @@ router.post('/', function(req, res) {
     console.log(data);
     //if userExists returns nothing, email of user is not in the database
     if(data.length === 0) {
-      res.status(401).json({message: 'user does not found'});
+      res.status(401).json({message: 'user not found'});
       res.end();
       //email of user is found and we proceed to compare the hashed passwords
     } else {
@@ -40,7 +39,8 @@ router.post('/', function(req, res) {
           console.log('pws matched');
           var profile = {
             id: user.id,
-            email: user.email
+            email: user.email,
+            lang_preference: user.lang_preference
           };
 
           // We are sending the profile inside the token
