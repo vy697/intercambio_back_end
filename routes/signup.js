@@ -17,7 +17,7 @@ router.post('/', function(req, res) {
 
   userExists(req)
   .then(function(data) {
-    console.log(data);
+    // console.log(data);
     if(data.length >= 1) {
       res.status(401).json({message: 'user already exists!'});
     } else {
@@ -36,6 +36,18 @@ router.post('/', function(req, res) {
             online: post.online,
             lang_preference: post.lang_preference
           })
+          
+          // TODO: insert into user speaks & user learns
+          // .returning('id')
+          //
+          // .then(function(id) {
+          //   knex('user_speaks_language').insert({
+          //     user_id: id,
+          //     // TODO: is this right??
+          //     language_id: post.language_id
+          //   });
+          // })
+
           .then(function() {
             res.send('Sign up successful!');
           })
