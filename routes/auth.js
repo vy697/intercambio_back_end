@@ -34,11 +34,13 @@ router.post('/', function(req, res) {
       bcrypt.compare(req.body.pw, data[0].pw, function(err, result) {
         //if there's no result, the passwords didn't match
         if(!result) {
+
           res.status(401).json({message: 'incorrect password'});
+
           //if the pw's matched, create the payload for the jwt
         } else {
 
-          console.log('pws matched');
+          console.log('passwords matched');
 
           var profile = {
             id: user.id,
@@ -49,7 +51,11 @@ router.post('/', function(req, res) {
 
           // We are sending the profile inside the token
           var token = jwt.sign(profile, process.env.SECRET);
-          res.status(200).json({ token: token});
+          
+          res.status(200).json({
+            token: token,
+            profile: profile
+          });
 
           console.log('JWT Profile: ', profile);
           res.end();
