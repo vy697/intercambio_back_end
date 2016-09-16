@@ -7,7 +7,7 @@ var express = require('express'),
     jwt = require('jsonwebtoken');
 
 function userExists(req) {
-  return knex('users').select('email', 'pw', 'id', 'lang_preference').where({
+  return knex('users').select('email', 'pw', 'id', 'lang_preference', 'name').where({
       email: req.body.email
     });
 }
@@ -30,24 +30,28 @@ router.post('/', function(req, res) {
       //grab user's id from knex statement in userExists function
       user.id = data[0].id;
       user.lang_preference = data[0].lang_preference;
+      user.name = data[0].name;
       bcrypt.compare(req.body.pw, data[0].pw, function(err, result) {
         //if there's no result, the passwords didn't match
         if(!result) {
           res.status(401).json({message: 'incorrect password'});
           //if the pw's matched, create the payload for the jwt
         } else {
+
           console.log('pws matched');
+
           var profile = {
             id: user.id,
             email: user.email,
-            lang_preference: user.lang_preference
+            lang_preference: user.lang_preference,
+            name: user.name
           };
 
           // We are sending the profile inside the token
           var token = jwt.sign(profile, process.env.SECRET);
           res.status(200).json({ token: token});
 
-          console.log(profile);
+          console.log('JWT Profile: ', profile);
           res.end();
         }
       });
