@@ -33,7 +33,7 @@ app.use(cors());
 app.use('/search', search);
 app.use('/signup', signup);
 app.use('/auth', auth); //no access if no token
-// app.use(expressJwt({ secret: process.env.SECRET})); //all routes from here on are restricted to users with tokens
+app.use(expressJwt({ secret: process.env.SECRET})); //all routes from here on are restricted to users with tokens
 app.use('/users', users); //, expressJwt({secret: 'INTERCAMBIOSECRETKEY'})
 
 
