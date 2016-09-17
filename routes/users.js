@@ -20,13 +20,12 @@ function getUser(req) {
 router.get('/', function(req, res) {
 
   //req.user with your logged in user's info is available through JTWs being unscrambled in app.js middleware
-  console.log('req.user: ', req.user);
+  // console.log('req.user: ', req.user);
 
   getUser(req)
   .then(function(data) {
     console.log('getUser data: ', data);
     res.json({data: data});
-
   })
   .catch(function(err) {
     console.log('get user error: ', err);

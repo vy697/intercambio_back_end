@@ -36,7 +36,6 @@ app.use('/auth', auth); //no access if no token
 app.use(expressJwt({ secret: process.env.SECRET})); //all routes from here on are restricted to users with tokens
 app.use('/users', users); //, expressJwt({secret: 'INTERCAMBIOSECRETKEY'})
 
-
 // error handling
 app.use(function (req, res, next) {
     let err = new Error('Route not found.');
