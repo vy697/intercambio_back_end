@@ -52,6 +52,23 @@ router.get('/', function(req, res) {
   });
 });
 
+function getCities() {
+  return knex('city_translations')
+  .join('cities', 'cities.id', 'city_translations.city_id')
+  .select('city_translations.display_name')
+  .where('city_translations.lang_preference', 'en');
+}
+
+router.get('/cities/en', function(req, res) {
+  getCities()
+  .then(function(data) {
+    res.json(data);
+  })
+  .catch(function(err) {
+    console.log('getCities express err:', err);
+  });
+});
+
 function findMatches(req) {
   return knex('user_speaks_language')
   .join('languages', 'languages.id', 'user_speaks_language.language_id')
