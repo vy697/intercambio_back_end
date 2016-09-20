@@ -21,20 +21,15 @@ function getAllExchanges() {
   return knex('users')
   .join('user_speaks_language', 'users.id', 'user_speaks_language.user_id')
   .join('user_learns_language', 'users.id', 'user_learns_language.user_id')
-
   .join('languages', 'languages.id', 'user_speaks_language.user_id')
   .join('languages as l', 'languages.id', 'user_learns_language.user_id')
   .join('language_translations', 'language_translations.language_id', 'languages.id')
-
   .join('cities', 'cities.id', 'users.city_id')
   .join('city_translations', 'city_translations.city_id', 'cities.id')
-
   .join('levels', 'levels.id', 'user_speaks_language.level_id')
   .join('level_translations', 'level_translations.level_id', 'levels.id')
-
   .join('levels as lev', 'lev.id', 'user_learns_language.level_id')
   .join('level_translations as lev_translations', 'lev_translations.level_id', 'levels.id')
-
   .select('users.id', 'lev_translations.display_name as learns_language_display_name', 'level_translations.display_name as speaks_level_display_name', 'levels.name as speaks_level', 'language_translations.display_name as language_display_name','city_translations.display_name', 'users.name', 'users.email', 'users.pw', 'users.city_id', 'users.description', 'users.age', 'users.photo_url', 'users.pair', 'users.group', 'users.online', 'users.lang_preference', 'languages.name as speaks_language', 'l.name as learns_language');
 }
 
@@ -52,6 +47,9 @@ router.get('/', function(req, res) {
   });
 });
 
+
+//TODO: abstract this out so that cities can be requested based on user lang_preference through req.user.lang_preference
+//but how to do for user that isn't logged in!!!!!
 function getCities() {
   return knex('city_translations')
   .join('cities', 'cities.id', 'city_translations.city_id')

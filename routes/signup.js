@@ -11,6 +11,12 @@ function userExists(req) {
     });
   }
 
+function getCityId(req) {
+  return knex('city_translations').select('city_id').where({
+    display_name: req.body.city
+  });
+}
+
 router.post('/', function(req, res) {
   var post = req.body;
 
@@ -20,13 +26,19 @@ router.post('/', function(req, res) {
     if(data.length >= 1) {
       res.status(401).json({message: 'user already exists!'});
     } else {
-      bcrypt.genSalt(10, function(err, salt) {
+      getCityId(req)
+      .then(function(data) {
+      //console.log(data[0].city_id);
+       var city_id = data[0].city_id;
+       bcrypt.genSalt(10, function(err, salt) {
         bcrypt.hash(post.pw, salt, function(err, hash) {
            return knex('users').insert({
             name: post.name,
             email: post.email,
             pw: hash,
-            city: post.city,
+            //TODO: cities come back from form as translated display_name (in any given language). Compare it
+            //against what is in city_translations table and grab city_id to insert into user table with the rest of their info
+            city_id: city_id,
             description: post.description,
             age: post.age,
             photo_url: post.photo_url,
@@ -61,7 +73,8 @@ router.post('/', function(req, res) {
            });
           });
         });
-      });
+       });
+     });
     }
   })
   .catch(function(err) {
