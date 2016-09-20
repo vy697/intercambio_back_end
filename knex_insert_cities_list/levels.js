@@ -8,7 +8,7 @@ exports.seed = function(knex, Promise) {
       knex('levels').insert({"name": "Beginner"}),
       knex('levels').insert({"name": "Intermediate"}),
       knex('levels').insert({"name": "Advanced"}),
-      knex('levels').insert({"name": "Native"})
+      knex('levels').insert({"name": "Native"})    
     ]);
   });
 };

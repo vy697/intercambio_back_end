@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
     table.string('name');
     table.string('email');
     table.string('pw');
-    table.string('city');
+    table.integer('city_id');
     table.text('description');
     table.string('age');
     table.string('photo_url');
