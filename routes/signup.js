@@ -22,7 +22,6 @@ router.post('/', function(req, res) {
 
   userExists(req)
   .then(function(data) {
-    // console.log(data);
     if(data.length >= 1) {
       res.status(401).json({message: 'user already exists!'});
     } else {
@@ -36,8 +35,8 @@ router.post('/', function(req, res) {
             name: post.name,
             email: post.email,
             pw: hash,
-            //TODO: cities come back from form as translated display_name (in any given language). Compare it
-            //against what is in city_translations table and grab city_id to insert into user table with the rest of their info
+            //cities come back from form as translated display_name (in any given language). This grabs id and compares it
+            //against what is in city_translations table and grabs city_id to insert into user table with the rest of their info
             city_id: city_id,
             description: post.description,
             age: post.age,
