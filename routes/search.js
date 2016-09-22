@@ -5,7 +5,6 @@ var express = require('express'),
     knex = require('../db/knex.js');
 
 function getAllExchanges(req) {
-  console.log(req.query.lang_preference);
   return knex('users')
   //languages that users speak and learn
   .join('user_speaks_language', 'users.id', 'user_speaks_language.user_id')
@@ -29,6 +28,7 @@ function getAllExchanges(req) {
   .select(
     'users.name',
     'user_speaks_language.language_id as speaks_language_id',
+    'user_learns_language.language_id as learns_language_id',
     'languages.name as speaks_language',
     'l.name as learns_language',
     'language_translations.display_name as speaks_language_display_name',
@@ -41,7 +41,6 @@ function getAllExchanges(req) {
     'city_translations.display_name as translated_location',
     'users.id',
     'users.email',
-    'users.pw',
     'users.city_id',
     'users.description',
     'users.age',
@@ -56,6 +55,11 @@ function getAllExchanges(req) {
   .andWhere('level_translations.lang_preference', req.query.lang_preference)
   .andWhere('lev_translations.lang_preference', req.query.lang_preference)
   .andWhere('city_translations.lang_preference', req.query.lang_preference);
+  // .where('language_translations.lang_preference', 'en')
+  // .andWhere('lang_translations.lang_preference', 'en')
+  // .andWhere('level_translations.lang_preference', 'en')
+  // .andWhere('lev_translations.lang_preference', 'en')
+  // .andWhere('city_translations.lang_preference', 'en');
 }
 
 router.get('/', function(req, res) {
@@ -101,10 +105,12 @@ function getCityId(req) {
 
 router.get('/results', function(req, res) {
   var city_id = '';
+  console.log(req.query);
 
   getCityId(req)
   .then(function(data) {
     console.log('into the then', data);
+    console.log('getCityId data:', data);
     city_id = data[0].city_id;
     console.log(city_id);
     return knex('users')
@@ -142,7 +148,6 @@ router.get('/results', function(req, res) {
       'city_translations.display_name as translated_location',
       'users.id',
       'users.email',
-      'users.pw',
       'users.city_id',
       'users.description',
       'users.age',
@@ -168,6 +173,7 @@ router.get('/results', function(req, res) {
     }
   })
   .catch(function(err) {
+    console.log(err);
     res.status(500).json({
       err: err
     });
