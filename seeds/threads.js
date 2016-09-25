@@ -1,0 +1,14 @@
+'use strict';
+
+'use strict';
+
+exports.seed = function(knex, Promise) {
+
+  return knex('threads').del()
+  .then(function() {
+    return Promise.all([
+    knex('threads').insert({"id": 1, "user1_id": 1, "user2_id": 5}),
+    knex('threads').insert({"id": 2, "user1_id": 1, "user2_id": 7})
+    ]);
+  });
+};

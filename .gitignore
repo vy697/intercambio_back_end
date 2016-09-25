@@ -2,3 +2,4 @@ node_modules
 mock_data
 .env
 geodata
+.DS_Store
