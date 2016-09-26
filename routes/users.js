@@ -74,11 +74,6 @@ router.get('/', function(req, res) {
 
 function getUserProfile(req) {
 
-  // Santi suggestion
-  // return request
-  // // return knex('users')
-  // var request = knex('users')
-
   return knex('users')
   //languages that users speak and learn
   .join('user_speaks_language', 'users.id', 'user_speaks_language.user_id')
@@ -130,13 +125,6 @@ function getUserProfile(req) {
   .andWhere('lev_translations.lang_preference', req.user.lang_preference)
   .andWhere('city_translations.lang_preference', req.user.lang_preference)
   .andWhere('users.id', req.query.id);
-
-  // Santi suggestion
-  // if something {
-  //   request = request.andwhere('user.id', req.query.id)
-  // }
-  //
-  // return request
 }
 
 router.get('/profile', function(req, res) {
@@ -146,10 +134,67 @@ router.get('/profile', function(req, res) {
   })
   .catch(function(err) {
     res.json({getUserProfileErr: err});
-    res.sendStatus(500);
   });
 });
 
+function getUserThreads(req) {
+  return knex('messages')
+  .join('users', 'users.id', 'messages.sender_id')
+  .join('users as u', 'u.id', 'messages.recipient_id')
+  .join('threads', 'threads.id', 'messages.thread_id')
+  .select(knex.raw('(case when threads.user1_id = ? then user2_id else user1_id end) as partner_id', [req.user.id]),'threads.user1_id as thread_receiver', 'threads.id as thread_id', 'messages.id as message_id', 'messages.thread_id','messages.message_text', 'messages.time_sent', 'messages.unread', 'users.name as sender', 'u.name as recipient')
+  //grab all msgs where logged in user is either the sender or the recipient(any thread that they participate in)
+  .where('messages.sender_id', req.user.id)
+  .orWhere('messages.recipient_id', req.user.id);
+}
 
+router.get('/messages', function(req, res) {
+  getUserThreads(req)
+  .then(function(data) {
+    res.json(data);
+  })
+  .catch(function(err) {
+    res.json({getMessagesErr: err});
+  });
+});
+
+// router.post('/messages', function(req, res) {
+//look to see if thread id exists
+//   if(!req.body.thread_id) {
+//     return knex('threads').insert({
+//       user1_id: req.body.user1,
+//       user2_id: req.body.user2,
+//       update_thread: new Date()
+//     })
+//     .returning('id')
+//     .then(function(id) {
+//       return knex('messages').insert({
+//         thread_id: id,
+//         sender_id: req.body.sender_id,
+//         recipient_id: req.body.recipient_id,
+//         time_sent: new Date(),
+//         unread: true
+//       })
+//       .then(function(data) {
+//         res.json(data);
+//       })
+//       .catch(function(err) {
+//         console.log('postmessage with thread insert err: ', err);
+//         res.json('postmessage with thread insert err: ', err);
+//       });
+//     });
+//   } else {
+//     return knex('messages').insert({
+//       thread_id: req.body.id,
+//       sender_id: req.body.sender_id,
+//       recipient_id: req.body.recipient_id,
+//       time_sent: new Date(),
+//       unread: true
+//     })
+//     .catch(function(err) {
+//       res.json({msginserterr: err});
+//     });
+//   }
+// });
 
 module.exports = router;

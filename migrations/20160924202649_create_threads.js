@@ -5,6 +5,7 @@ exports.up = function(knex, Promise) {
     table.increments('id');
     table.integer('user1_id');
     table.integer('user2_id');
+    table.timestamp('update_thread').notNullable().defaultTo(knex.raw('now()'));
   });
 };
 
