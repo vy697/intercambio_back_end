@@ -240,6 +240,8 @@ router.get('/online', function(req, res) {
   getOnlineExchanges(req)
   .then(function(data) {
     res.json(data);
+
+
   })
   .catch(function(err) {
     res.json(err);

@@ -5,6 +5,7 @@ exports.seed = function(knex, Promise) {
   return knex("user_speaks_language").del()
   .then(function() {
     return Promise.all([
+    knex.raw('ALTER SEQUENCE public.user_speaks_language_id_seq RESTART WITH 17;'),
     knex("user_speaks_language").insert({"id": 1, "user_id": 1, "language_id": 1, "level_id": 4}),
     knex("user_speaks_language").insert({"id": 2, "user_id": 2, "language_id": 1, "level_id": 4}),
     knex("user_speaks_language").insert({"id": 3, "user_id": 3, "language_id": 2, "level_id": 4}),
