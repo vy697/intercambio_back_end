@@ -55,11 +55,6 @@ function getAllExchanges(req) {
   .andWhere('level_translations.lang_preference', req.query.lang_preference)
   .andWhere('lev_translations.lang_preference', req.query.lang_preference)
   .andWhere('city_translations.lang_preference', req.query.lang_preference);
-  // .where('language_translations.lang_preference', 'en')
-  // .andWhere('lang_translations.lang_preference', 'en')
-  // .andWhere('level_translations.lang_preference', 'en')
-  // .andWhere('lev_translations.lang_preference', 'en')
-  // .andWhere('city_translations.lang_preference', 'en');
 }
 
 router.get('/', function(req, res) {
