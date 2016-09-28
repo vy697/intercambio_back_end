@@ -72,6 +72,7 @@ router.get('/', function(req, res) {
 
 //cities are requested based on user lang_preference through req.user.lang_preference
 function getCities(req) {
+  console.log('language of request', req.query.lang_preference);
   return knex('city_translations')
   .join('cities', 'cities.id', 'city_translations.city_id')
   .select('city_translations.display_name')
@@ -84,6 +85,7 @@ router.get('/cities', function(req, res) {
   getCities(req)
   .then(function(data) {
     res.json(data);
+    console.log(data);
   })
   .catch(function(err) {
     console.log('getCities express err:', err);
