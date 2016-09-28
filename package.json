@@ -4,14 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-<<<<<<< HEAD
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "node_modules/.bin/knex migrate:latest",
     "start": "node app.js"
-=======
-    "postinstall": "node_modules/.bin/knex seed:run",
-    "test": "echo \"Error: no test specified\" && exit 1"
->>>>>>> dev
   },
   "author": "",
   "license": "ISC",
