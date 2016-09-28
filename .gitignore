@@ -3,3 +3,4 @@ mock_data
 .env
 geodata
 .DS_Store
+knex_insert_cities_list
