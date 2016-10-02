@@ -1,10 +1,12 @@
 # InterCambio
 
-![App ScreenShot](img/jumbotron_img3.png)
+![App ScreenShot](./img/jumbotron_img3.png)
 
 [Check out the app online here] https://intercambio.surge.sh ||
 
 <!-- [Watch A Video About The App](https://www.youtube.com/watch?v=b_8yTG0VTQc&feature=youtu.be) -->
+
+#### Link to front-end repo: https://github.com/vy697/intercambio_front_end
 
 ##### App description
 ------
